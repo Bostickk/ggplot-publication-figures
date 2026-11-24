@@ -1,45 +1,191 @@
-# ggplot-publication-figures
+# ggplot Publication Figures
 
-A reusable Codex skill for creating, revising, auditing, and delivering publication-ready scientific figures with R and ggplot2.
+**用自然语言，把数据画成风格统一、可复现的科研图。**
 
-The skill focuses on scientific integrity as well as appearance. It prevents silent axis clipping, requires deterministic label selection, distinguishes display-only transformations from analysis values, and verifies that figure files are actually embedded in Obsidian or Markdown reports.
+Prism 风格 · 原始观测可见 · 8 套可复用配色 · PNG / PDF / SVG
 
-## Contents
+一个面向 **Codex** 的科研绘图 skill：将图形设计、R 代码、视觉检查和文件交付串成可复用的工作流，适合基础实验、临床研究和生物信息学图形。
 
-- `SKILL.md` — Codex skill entry point and required workflow.
-- `references/ggplot2 科研绘图规范.md` — complete Chinese publication-figure specification.
-- `scripts/validate_figure_delivery.ps1` — checks report embeds and matching PNG/PDF/SVG files.
+*An agent skill for reproducible scientific figures with R and ggplot2. Prism-inspired grouped plots, visible observations, sourced colour palettes, and consistent PNG/PDF/SVG delivery.*
 
-## Install
+[快速开始](#快速开始) · [配色库](#配色库) · [使用示例](#使用示例) · [复现与交付](#复现与交付)
 
-Clone the repository into the Codex skills directory:
+## 先看效果
+
+<table>
+  <tr>
+    <td align="center"><b>柱状图 + 原始散点</b></td>
+    <td align="center"><b>箱线图 + 原始散点</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/prism-bar.png" width="440" alt="Prism 风格柱状图：清亮填色、黑色轮廓、黑边白心圆点和标准差误差线"></td>
+    <td><img src="assets/prism-box.png" width="440" alt="Prism 风格箱线图：黑边白心圆点叠加中位数和四分位区间"></td>
+  </tr>
+</table>
+
+以上示例均使用**模拟数据**，每组 10 个观测。柱状图展示均值 ± 标准差；箱线图展示中位数、四分位区间及 1.5 × IQR 范围内的须，全部观测由散点层显示。配色为 `npg_soft`，可用[示例脚本](examples/prism_style_demo.R)复现。
+
+## 为什么使用这个 skill
+
+每次向 AI 描述图形时，都重新交代圆点形状、线宽、字体、颜色和导出格式，会消耗大量时间。这个项目把这些偏好，以及科研绘图中的数据检查要求，保存在一个可以反复调用的 skill 中。
+
+| 你关心的事 | skill 中的默认做法 |
+| --- | --- |
+| 图形风格稳定 | 分组测量图采用 Prism 风格：白底、黑色左轴和下轴、向外刻度、清晰文字 |
+| 看得到每个观测 | 柱状图或箱线图叠加散点，统一为黑边白心圆形 |
+| 配色清亮、协调 | 黑色柱体和箱体轮廓，默认 `npg_soft`，另存 7 套备选 |
+| 统计含义清楚 | 标明实验单位、样本量、误差量和比较方法；配对关系按研究设计处理 |
+| 改图可复现 | 固定随机布局种子，明确标签与排序规则，保留原值和展示变换记录 |
+| 文件方便投稿和排版 | 同一图对象导出 PNG、PDF、SVG，并检查原尺寸和缩小后的效果 |
+| 报告里显示的是新图 | 检查 Markdown / Obsidian 图片路径和同名导出文件 |
+
+详细规范还覆盖火山图、GO / KEGG 富集图、GSEA、热图、PCA 和相关性图。不同图形使用各自合适的视觉编码；Prism 默认主题主要用于分组测量数据。
+
+## 快速开始
+
+### 1. 安装到 Codex
+
+将整个仓库放入用户级 skills 目录。[Codex 的技能发现规则](https://developers.openai.com/codex/skills/)支持 `~/.agents/skills/`。
+
+**Windows / PowerShell**
 
 ```powershell
 git clone https://github.com/Bostickk/ggplot-publication-figures.git `
-  "$env:USERPROFILE\.codex\skills\ggplot-publication-figures"
+  "$env:USERPROFILE/.agents/skills/ggplot-publication-figures"
 ```
 
-Restart or refresh Codex so the new skill is discovered. The skill can then be invoked explicitly as `$ggplot-publication-figures`, and it may also be selected automatically for manuscript-quality ggplot2 work.
+**macOS / Linux**
 
-## Delivery validation
+```bash
+mkdir -p ~/.agents/skills
+git clone https://github.com/Bostickk/ggplot-publication-figures.git \
+  ~/.agents/skills/ggplot-publication-figures
+```
+
+已有安装的用户，保留当前安装位置并更新对应副本即可。完成后，在新的 Codex 对话中调用：
+
+```text
+使用 $ggplot-publication-figures，读取我的实验数据，
+按 Prism 风格绘制带原始散点的柱状图，使用 npg_soft 配色，
+标明均值和 SD，并导出 PNG、PDF、SVG。
+```
+
+### 2. 准备绘图环境
+
+需要本地 R 环境。基础绘图使用 `ggplot2`，Prism 主题优先使用 `ggprism`：
+
+```r
+install.packages(c("ggplot2", "ggprism"))
+```
+
+具体任务可能另需 `dplyr`、`ggrepel` 等包。分组图主题提供纯 ggplot2 后备方案。skill 由 agent 读取规则、生成和执行项目代码；配色函数和示例脚本也可以直接在 R 中使用。
+
+## 配色库
+
+默认 **`npg_soft`**：NPG 原色混入 20% 白色，并调整为适合常见分组图的顺序。它保留了青蓝、珊瑚红、绿色和深蓝的辨识度，适合搭配黑色轮廓和白心散点。
+
+![8 套科研配色及其十六进制色值](assets/palette-catalogue.png)
+
+| 名称 | 风格与适用场景 |
+| --- | --- |
+| **`npg_soft`** | 默认；清亮柔和的 NPG 调整版，适合柱体和箱体 |
+| `npg` | NPG 原版，色感更鲜明 |
+| `nejm` | 蓝、红、橙、绿对比均衡 |
+| `lancet` | 深蓝与红绿搭配，对比较强 |
+| `aaas` | 深色系，适合需要更强视觉对比时 |
+| `set2` | 柔和多色，适合分类填充 |
+| `tol_bright` | Paul Tol Bright，优先考虑色觉差异时的备选 |
+| `tol_light` | Paul Tol Light，偏浅且明亮，适合带轮廓的填充区域 |
+
+从仓库根目录运行，即可独立取色：
+
+```r
+source("scripts/publication_palettes.R")
+
+group_order <- c("Control", "Model", "Treatment A", "Treatment B")
+group_colours <- setNames(
+  get_publication_palette("npg_soft", length(group_order)),
+  group_order
+)
+
+# 当 ggplot 的 fill 映射到对应组名时：
+# + scale_fill_manual(values = group_colours)
+```
+
+原始色值、来源与调整过程均保存在[配色指南](references/palette-guide.md)和[机器可读配色库](references/palette-bank.json)中。期刊名称表示配色灵感来源。具体图形仍应检查色觉差异、打印表现和组别区分。
+
+## 使用示例
+
+可以直接复制下面的需求，再补上数据路径、分组和单位。
+
+**基础实验分组图**
+
+```text
+使用 $ggplot-publication-figures。
+读取 data.csv：group 为分组，animal_id 为动物编号，value 为测量值。
+每只动物为一个实验单位。绘制带散点的柱状图，显示均值 ± SD，
+使用 npg_soft 配色，散点保持黑边白心圆形。保存 R 脚本和三种格式图片。
+```
+
+**比较数据分布**
+
+```text
+使用 $ggplot-publication-figures。
+将分组测量值画成箱线图并叠加全部个体散点，使用 set2 配色。
+明确箱体和须的定义，保留配对设计信息，标明每组有效样本量。
+```
+
+**生物信息学结果图**
+
+```text
+使用 $ggplot-publication-figures。
+根据差异分析结果绘制火山图。DEG 阈值为 padj < 0.05 且 |log2FC| > 1。
+按 skill 中的确定规则选择标签，固定布局种子，检查极端值和标签裁切。
+```
+
+## 复现与交付
+
+克隆仓库后，在仓库根目录运行示例：
+
+```bash
+Rscript examples/prism_style_demo.R
+```
+
+脚本在 `examples/output/` 中生成两张图的 PNG / PDF / SVG、模拟数据 CSV、R 环境信息和一个含图片的 Markdown 报告。示例固定横向抖动的随机种子，保留纵轴测量值，不进行假设检验。
+
+示例已在 Windows、R 4.5.3、ggplot2 4.0.2 和 ggprism 1.0.7 环境运行。脚本使用仓库相对路径，其他平台的字体和导出设备应按本机环境检查。
+
+对于 Markdown 或 Obsidian 报告，可以用 PowerShell 检查嵌入路径、图片大小和同名格式文件：
 
 ```powershell
-powershell -ExecutionPolicy Bypass `
-  -File scripts/validate_figure_delivery.ps1 `
-  -ReportPath "D:\path\report.md" `
-  -VaultRoot "D:\path\vault"
+pwsh -File scripts/validate_figure_delivery.ps1 `
+  -ReportPath examples/output/report.md `
+  -VaultRoot .
 ```
 
-The validator distinguishes Obsidian Wikilinks from standard Markdown image paths and verifies that each embedded figure has matching PNG, PDF, and SVG files.
+实际 Obsidian 报告的 `-VaultRoot` 应指向其 vault 根目录。自动检查完成后，再查看全尺寸与约 50% 缩放后的图形，确认文字、散点、误差线和标签清晰可读。
 
-## Core rules
+## 项目结构
 
-- Preserve original values for statistics and ranking; keep display variables separate.
-- Never use coordinate limits to silently hide observations or labels.
-- Use deterministic and declared gene/pathway selection rules.
-- State whether GO-BP, GO-CC, and GO-MF were tested.
-- Distinguish ORA from GSEA in filenames, titles, and interpretation.
-- Inspect the full-size figure and an approximately 50% rendering.
-- Treat figure generation, multi-format export, report embedding, and path validation as one delivery workflow.
+```text
+ggplot-publication-figures/
+├── SKILL.md                         # agent 入口与默认工作流
+├── references/
+│   ├── ggplot2 科研绘图规范.md       # 完整中文规范
+│   ├── palette-guide.md             # 配色选择、来源与调整记录
+│   └── palette-bank.json            # 固定 HEX 色值与元数据
+├── scripts/
+│   ├── publication_palettes.R       # 可独立使用的 R 配色函数
+│   └── validate_figure_delivery.ps1  # 报告图片与文件检查
+├── examples/
+│   └── prism_style_demo.R           # 可复现的模拟数据示例
+└── assets/                          # README 图形与色卡
+```
 
-This repository is private and currently has no open-source license.
+## 来源与参与
+
+主题与配色参考 [ggplot2](https://ggplot2.tidyverse.org/)、[ggprism](https://csdaw.github.io/ggprism/)、[ggsci](https://nanx.me/ggsci/)、[ColorBrewer](https://colorbrewer2.org/) 和 [Paul Tol](https://sronpersonalpages.nl/~pault/)。
+
+欢迎通过 [Issues](https://github.com/Bostickk/ggplot-publication-figures/issues) 或 Pull Request 提交可复现的问题、图形改进和配色建议。报告问题时，请附最小示例数据、R 与关键包版本，以及预期效果。
+
+项目当前尚未指定许可证。
