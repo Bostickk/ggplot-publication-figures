@@ -1,12 +1,12 @@
 # ggplot Publication Figures
 
-**Turn natural-language requests into consistent, reproducible scientific figures.**
+**Reproducible figures for biomedical research, guided by natural-language requests.**
 
 English | [简体中文](README.zh-CN.md)
 
 Prism-inspired styling · Visible observations · 8 reusable palettes · 12 runnable examples · 300 ppi PNG by default · optional PDF / SVG
 
-A **Codex skill** that brings figure design, R code, visual review, and file delivery into a reusable workflow for experimental biology, clinical research, and bioinformatics.
+A **Codex plotting skill designed primarily for biomedical research**, covering cell and animal experiments, clinical studies, and omics analyses. It brings figure design, R code, visual review, and file delivery into a reusable workflow for biomedical manuscripts.
 
 [Quick start](#quick-start) · [Colour palettes](#colour-palettes) · [Example prompts](#example-prompts) · [Reproduce the gallery](#reproduce-the-gallery)
 

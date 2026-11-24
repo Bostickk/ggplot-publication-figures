@@ -2,13 +2,13 @@
 
 [English](README.md) | 简体中文
 
-**用自然语言，把数据画成风格统一、可复现的科研图。**
+**面向生物医学研究，用自然语言生成风格统一、可复现的论文图。**
 
 Prism 风格 · 原始观测可见 · 8 套可复用配色 · 12 张可运行示例 · 默认 300 ppi PNG · PDF / SVG 可选
 
-一个面向 **Codex** 的科研绘图 skill：将图形设计、R 代码、视觉检查和文件交付串成可复用的工作流，适合基础实验、临床研究和生物信息学图形。
+一个主要面向 **生物医学研究** 的 **Codex 绘图 skill**，覆盖细胞与动物实验、临床研究和组学分析。它将图形设计、R 代码、视觉检查和文件交付串成可复用的论文绘图工作流。
 
-*An agent skill for reproducible scientific figures with R and ggplot2. Prism-inspired plots, sourced palettes, and user-selected exports. Default: 300 ppi PNG.*
+*A Codex skill for reproducible biomedical figures with R and ggplot2, covering experimental biology, clinical research, and omics. Default: 300 ppi PNG.*
 
 [快速开始](#快速开始) · [配色库](#配色库) · [使用示例](#使用示例) · [复现与交付](#复现与交付)
 
