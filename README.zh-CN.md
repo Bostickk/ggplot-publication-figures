@@ -4,11 +4,11 @@
 
 **用自然语言，把数据画成风格统一、可复现的科研图。**
 
-Prism 风格 · 原始观测可见 · 8 套可复用配色 · 12 张可运行示例 · PNG / PDF / SVG
+Prism 风格 · 原始观测可见 · 8 套可复用配色 · 12 张可运行示例 · 默认 300 ppi PNG · PDF / SVG 可选
 
 一个面向 **Codex** 的科研绘图 skill：将图形设计、R 代码、视觉检查和文件交付串成可复用的工作流，适合基础实验、临床研究和生物信息学图形。
 
-*An agent skill for reproducible scientific figures with R and ggplot2. Prism-inspired grouped plots, visible observations, sourced colour palettes, and consistent PNG/PDF/SVG delivery.*
+*An agent skill for reproducible scientific figures with R and ggplot2. Prism-inspired plots, sourced palettes, and user-selected exports. Default: 300 ppi PNG.*
 
 [快速开始](#快速开始) · [配色库](#配色库) · [使用示例](#使用示例) · [复现与交付](#复现与交付)
 
@@ -52,7 +52,7 @@ Prism 风格 · 原始观测可见 · 8 套可复用配色 · 12 张可运行示
 | 配色清亮、协调 | 黑色柱体和箱体轮廓，默认 `npg_soft`，另存 7 套备选 |
 | 统计含义清楚 | 标明实验单位、样本量、误差量和比较方法；配对关系按研究设计处理 |
 | 改图可复现 | 固定随机布局种子，明确标签与排序规则，保留原值和展示变换记录 |
-| 文件方便投稿和排版 | 同一图对象导出 PNG、PDF、SVG，并检查原尺寸和缩小后的效果 |
+| 按需导出 | 每次调用先询问格式，默认仅 300 ppi PNG；多格式沿用同一图对象 |
 | 报告里显示的是新图 | 检查 Markdown / Obsidian 图片路径和同名导出文件 |
 
 详细规范还覆盖火山图、GO / KEGG 富集图、GSEA、热图、PCA 和相关性图。不同图形使用各自合适的视觉编码；Prism 默认主题主要用于分组测量数据。
@@ -93,6 +93,8 @@ git clone https://github.com/Bostickk/ggplot-publication-figures.git \
 ```r
 install.packages(c("ggplot2", "ggprism", "ggrepel", "patchwork", "survival", "jsonlite"))
 ```
+
+每次调用时，skill 都会先询问 PNG、PDF、SVG 中需要哪些格式，默认选项为 **仅 300 ppi PNG**。确认后按所选格式输出，PNG 采用其他分辨率时需要明确指定。
 
 具体任务可能另需 `dplyr`、`ggrepel` 等包。分组图主题提供纯 ggplot2 后备方案。skill 由 agent 读取规则、生成和执行项目代码；配色函数和示例脚本也可以直接在 R 中使用。
 
@@ -165,13 +167,15 @@ group_colours <- setNames(
 
 ```bash
 Rscript examples/biomedical_gallery.R
+# 显式选择其他格式与 PNG 分辨率：
+Rscript examples/biomedical_gallery.R --formats=png,pdf,svg --ppi=300
 ```
 
-脚本在 `examples/biomedical-output/` 中生成 12 张图的 PNG / PDF / SVG、模拟数据及分析结果 CSV、R 环境信息、图注和 manifest.json。随机数据与布局固定种子；示例分析的计算方法在代码和图注中说明。已有的双图入门示例仍可用 `Rscript examples/prism_style_demo.R` 运行。
+脚本在 `examples/biomedical-output/` 中默认生成 12 张 300 ppi PNG、模拟数据及分析结果 CSV、R 环境信息、图注和 manifest.json。随机数据与布局固定种子；示例分析的计算方法在代码和图注中说明。已有的双图入门示例仍可用 `Rscript examples/prism_style_demo.R` 运行。
 
 示例已在 Windows、R 4.5.3、ggplot2 4.0.2 和 ggprism 1.0.7 环境运行。脚本使用仓库相对路径，其他平台的字体和导出设备应按本机环境检查。
 
-对于 Markdown 或 Obsidian 报告，可以用 PowerShell 检查嵌入路径、图片大小和同名格式文件：
+对于 Markdown 或 Obsidian 报告，检查器默认只要求 PNG；如选择多个格式，添加对应的 `-ExpectedFormats png,pdf,svg`。它支持图片嵌入和 PDF 文件链接：
 
 ```powershell
 pwsh -File scripts/validate_figure_delivery.ps1 `
@@ -207,4 +211,4 @@ ggplot-publication-figures/
 
 欢迎通过 [Issues](https://github.com/Bostickk/ggplot-publication-figures/issues) 或 Pull Request 提交可复现的问题、图形改进和配色建议。报告问题时，请附最小示例数据、R 与关键包版本，以及预期效果。
 
-项目当前尚未指定许可证。
+本项目采用 [MIT License](LICENSE)，版权署名为 **2026 Bostickk**。第三方依赖及引用材料遵循各自的许可证与来源说明。

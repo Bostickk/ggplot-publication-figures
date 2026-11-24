@@ -9,10 +9,12 @@
       "width_in": 5.7,
       "height_in": 4.6,
       "files": [
-        "01_bar.png",
-        "01_bar.pdf",
-        "01_bar.svg"
-      ]
+        "01_bar.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "02_box",
@@ -22,10 +24,12 @@
       "width_in": 5.7,
       "height_in": 4.6,
       "files": [
-        "02_box.png",
-        "02_box.pdf",
-        "02_box.svg"
-      ]
+        "02_box.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "03_paired",
@@ -35,10 +39,12 @@
       "width_in": 4.8,
       "height_in": 4.6,
       "files": [
-        "03_paired.png",
-        "03_paired.pdf",
-        "03_paired.svg"
-      ]
+        "03_paired.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "04_longitudinal",
@@ -48,10 +54,12 @@
       "width_in": 6.4,
       "height_in": 4.6,
       "files": [
-        "04_longitudinal.png",
-        "04_longitudinal.pdf",
-        "04_longitudinal.svg"
-      ]
+        "04_longitudinal.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "05_nested",
@@ -61,10 +69,12 @@
       "width_in": 7,
       "height_in": 4.5,
       "files": [
-        "05_nested.png",
-        "05_nested.pdf",
-        "05_nested.svg"
-      ]
+        "05_nested.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "06_dose",
@@ -74,10 +84,12 @@
       "width_in": 6,
       "height_in": 4.6,
       "files": [
-        "06_dose.png",
-        "06_dose.pdf",
-        "06_dose.svg"
-      ]
+        "06_dose.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "07_forest",
@@ -87,10 +99,12 @@
       "width_in": 7,
       "height_in": 4.5,
       "files": [
-        "07_forest.png",
-        "07_forest.pdf",
-        "07_forest.svg"
-      ]
+        "07_forest.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "08_km",
@@ -100,10 +114,12 @@
       "width_in": 6.4,
       "height_in": 5.5,
       "files": [
-        "08_km.png",
-        "08_km.pdf",
-        "08_km.svg"
-      ]
+        "08_km.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "09_cif",
@@ -113,10 +129,12 @@
       "width_in": 6.4,
       "height_in": 5.5,
       "files": [
-        "09_cif.png",
-        "09_cif.pdf",
-        "09_cif.svg"
-      ]
+        "09_cif.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "10_volcano",
@@ -126,10 +144,12 @@
       "width_in": 6.8,
       "height_in": 5.5,
       "files": [
-        "10_volcano.png",
-        "10_volcano.pdf",
-        "10_volcano.svg"
-      ]
+        "10_volcano.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "11_heatmap",
@@ -139,10 +159,12 @@
       "width_in": 6.3,
       "height_in": 5.9,
       "files": [
-        "11_heatmap.png",
-        "11_heatmap.pdf",
-        "11_heatmap.svg"
-      ]
+        "11_heatmap.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     },
     {
       "id": "12_enrichment",
@@ -152,10 +174,18 @@
       "width_in": 8,
       "height_in": 5.3,
       "files": [
-        "12_enrichment.png",
-        "12_enrichment.pdf",
-        "12_enrichment.svg"
-      ]
+        "12_enrichment.png"
+      ],
+      "formats": [
+        "png"
+      ],
+      "png_ppi": 300
     }
-  ]
+  ],
+  "export": {
+    "formats": [
+      "png"
+    ],
+    "png_ppi": 300
+  }
 }

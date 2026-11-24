@@ -8,7 +8,7 @@
 Rscript examples/biomedical_gallery.R
 ```
 
-依赖：ggplot2、ggrepel、patchwork、survival、jsonlite；ggprism 为可选主题依赖。脚本生成 `examples/biomedical-output/`：12 组 PNG/PDF/SVG、数据和结果 CSV、图注报告、manifest.json 与 R 环境信息。PNG 为 400 dpi；下面为优化后的预览。
+依赖：ggplot2、ggrepel、patchwork、survival、jsonlite；ggprism 为可选主题依赖。脚本默认在 `examples/biomedical-output/` 生成 12 张 300 ppi PNG、数据和结果 CSV、图注报告、manifest.json 与 R 环境信息。使用 `--formats=png,pdf,svg` 明确选择其他组合，使用 `--ppi=600` 明确调整 PNG 分辨率；下面为风格预览。
 
 分析与绘图在示例中分段实现，分析结果表先保存再绘图。07 直接读取示例中的模拟 RR 结果表；12 直接展示模拟 ORA 结果表。其余数值生成和估计均在代码中明示。实际研究改图沿用已确认的数据和分析结果。
 

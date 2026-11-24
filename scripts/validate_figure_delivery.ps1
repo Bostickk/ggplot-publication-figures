@@ -5,7 +5,7 @@ param(
 
     [string]$VaultRoot,
 
-    [string[]]$ExpectedFormats = @('.png', '.pdf', '.svg'),
+    [string[]]$ExpectedFormats = @('.png'),
 
     [int]$MinimumBytes = 1024,
 
@@ -13,6 +13,15 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+# Accept both PowerShell arrays and comma-separated values passed through -File.
+$ExpectedFormats = @($ExpectedFormats | ForEach-Object { $_ -split ',' } | ForEach-Object {
+    $format = $_.Trim().TrimStart('.').ToLowerInvariant()
+    if ($format -notin @('png', 'pdf', 'svg')) { throw "Unsupported expected format: $_" }
+    ".$format"
+} | Select-Object -Unique)
+if ($ExpectedFormats.Count -eq 0) { throw 'Select at least one expected format.' }
+
 
 function Resolve-ExistingPath {
     param([string]$PathValue, [string]$Label)
@@ -57,7 +66,7 @@ foreach ($match in [regex]::Matches($content, $wikiPattern, 'IgnoreCase')) {
     })
 }
 
-$markdownPattern = '!\[[^\]]*\]\(([^)]+?\.(?:png|jpg|jpeg|tif|tiff|svg|pdf))\)'
+$markdownPattern = '!?\[[^\]]*\]\(([^)]+?\.(?:png|jpg|jpeg|tif|tiff|svg|pdf))\)'
 foreach ($match in [regex]::Matches($content, $markdownPattern, 'IgnoreCase')) {
     $records.Add([pscustomobject]@{
         Kind = 'Markdown'
@@ -67,7 +76,7 @@ foreach ($match in [regex]::Matches($content, $markdownPattern, 'IgnoreCase')) {
 }
 
 if ($records.Count -eq 0) {
-    throw 'No embedded figure links were found in the report.'
+    throw 'No figure embeds or links were found in the report.'
 }
 
 $failures = [System.Collections.Generic.List[string]]::new()

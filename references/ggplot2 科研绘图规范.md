@@ -10,6 +10,6 @@
 | 显微图、WB、影像定量及标尺 | [影像与定量](imaging.md) |
 | 多面板、图例、对齐和版面 | [组合排版](composition.md) |
 | 配色及固定 HEX | [配色指南](palette-guide.md) / [配色库](palette-bank.json) |
-| 三格式导出、图注、报告嵌入和视觉检查 | [交付规范](delivery.md) |
+| 格式选择与按需导出、图注、报告嵌入和视觉检查 | [交付规范](delivery.md) |
 
 可运行案例见 [12 张示例图](../examples/biomedical_gallery.md)。

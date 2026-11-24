@@ -4,7 +4,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Prism-inspired styling · Visible observations · 8 reusable palettes · 12 runnable examples · PNG / PDF / SVG
+Prism-inspired styling · Visible observations · 8 reusable palettes · 12 runnable examples · 300 ppi PNG by default · optional PDF / SVG
 
 A **Codex skill** that brings figure design, R code, visual review, and file delivery into a reusable workflow for experimental biology, clinical research, and bioinformatics.
 
@@ -50,7 +50,7 @@ Repeating your preferences for point shapes, borders, fonts, colours, and export
 | Clear, coordinated colours | Black bar and box outlines; `npg_soft` by default, with 7 alternatives |
 | Clear statistical meaning | Experimental units, sample sizes, uncertainty, and comparisons described in context; pairing follows the study design |
 | Reproducible revisions | Fixed layout seeds, explicit label and sorting rules, preserved values, and recorded display transformations |
-| Useful files for submission and layout | PNG, PDF, and SVG exported from the same plot object and visually reviewed at full and reduced sizes |
+| Selected export formats | Ask on every invocation; default to 300 ppi PNG; selected formats share one plot object |
 | Correct figures in the report | Markdown / Obsidian embed paths and matching export files checked |
 
 The references also cover GO / KEGG enrichment, GSEA, PCA, and correlation figures. Each figure family uses its own visual semantics. The Prism defaults primarily apply to grouped measurement data.
@@ -91,6 +91,8 @@ The examples use a local R installation and the following packages:
 ```r
 install.packages(c("ggplot2", "ggprism", "ggrepel", "patchwork", "survival", "jsonlite"))
 ```
+
+On every skill invocation, the agent asks which of PNG, PDF and SVG to produce. The default selection is **PNG only at 300 ppi**. Export follows your confirmation; another PNG resolution requires an explicit request.
 
 `ggprism` supplies the preferred experimental theme; a plain ggplot2 fallback is available. Other tasks may require additional packages such as `dplyr`. The agent reads the skill and generates project-specific code. You can also use the palette functions and example scripts directly in R.
 
@@ -168,13 +170,15 @@ From the repository root, run all 12 examples:
 
 ```bash
 Rscript examples/biomedical_gallery.R
+# Explicit format selection and PNG resolution:
+Rscript examples/biomedical_gallery.R --formats=png,pdf,svg --ppi=300
 ```
 
-The script creates `examples/biomedical-output/` with 12 PNG/PDF/SVG triplets, synthetic observations and result tables in CSV, R session information, captions, and `manifest.json`. Data generation and layouts use fixed seeds. Analysis methods are described in the code and captions. The introductory two-plot example remains available through `Rscript examples/prism_style_demo.R`.
+The script creates `examples/biomedical-output/` with 12 PNG files at 300 ppi by default, synthetic observations and result tables in CSV, R session information, captions, and `manifest.json`. Data generation and layouts use fixed seeds. Analysis methods are described in the code and captions. The introductory two-plot example remains available through `Rscript examples/prism_style_demo.R`.
 
 The examples have been run on Windows with R 4.5.3, ggplot2 4.0.2, and ggprism 1.0.7. Scripts use repository-relative paths. Check fonts and export devices in your own environment.
 
-Use PowerShell to check report embeds, minimum file sizes, and matching export formats:
+Use PowerShell to check figure embeds or PDF links, minimum file sizes, and the selected export formats. The validator defaults to PNG only. Add `-ExpectedFormats png,pdf,svg` for that explicitly selected combination:
 
 ```powershell
 pwsh -File scripts/validate_figure_delivery.ps1 `
@@ -211,4 +215,4 @@ Themes and palettes draw on [ggplot2](https://ggplot2.tidyverse.org/), [ggprism]
 
 [Issues](https://github.com/Bostickk/ggplot-publication-figures/issues) and pull requests are welcome for reproducible problems, figure improvements, and palette suggestions. Please include a minimal example, R and package versions, and the expected result when reporting a problem.
 
-A project license has not yet been specified.
+Licensed under the [MIT License](LICENSE). Copyright © 2026 Bostickk. Third-party dependencies and referenced materials retain their respective licenses and attribution requirements.

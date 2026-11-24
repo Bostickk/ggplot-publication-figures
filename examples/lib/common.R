@@ -1,22 +1,17 @@
-new_gallery_context <- function(repo, out) {
+new_gallery_context <- function(repo, out, formats = "png", ppi = 300) {
+  formats <- normalise_figure_formats(formats)
   e <- new.env(parent = globalenv())
-  e$repo <- repo; e$out <- out; e$items <- list(); e$plots <- list()
+  e$repo <- repo; e$out <- out; e$formats <- formats; e$ppi <- ppi; e$items <- list(); e$plots <- list()
   dir.create(out, recursive = TRUE, showWarnings = FALSE)
   e$csv <- function(d, name) {
     write.csv(d, file.path(out, paste0(name, ".csv")), row.names = FALSE, na = "NA")
   }
   e$save <- function(p, id, title, caption, width = 5.7, height = 4.6, seed = NA_integer_) {
-    for (ext in c("png", "pdf", "svg")) {
-      args <- list(filename = file.path(out, paste0(id, ".", ext)), plot = p,
-                   width = width, height = height, units = "in", bg = "white")
-      if (ext == "png") args$dpi <- 400
-      if (ext == "pdf") args$device <- grDevices::cairo_pdf
-      if (ext == "svg") args$device <- grDevices::svg
-      do.call(ggplot2::ggsave, args)
-    }
+    export_publication_figure(p, file.path(out, id), width, height, formats, ppi)
     e$items[[id]] <- list(id = id, title = title, caption = caption, seed = seed,
                           width_in = width, height_in = height,
-                          files = paste0(id, c(".png", ".pdf", ".svg")))
+                          formats = as.list(formats), png_ppi = if ("png" %in% formats) ppi else NULL,
+                          files = as.list(paste0(id, ".", formats)))
     e$plots[[id]] <- p
   }
   e

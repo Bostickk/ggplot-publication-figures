@@ -2,6 +2,10 @@
 
 所有检查仅针对本次已有图形和适用项目；其余记录为“不适用”。单图任务按该图形检查，批量任务优先检查本批最困难的图形。无需为满足清单新增空结果图、其他分析图或报告，也无需索取无关资料。下面沿用的专题清单均服从此适用性规则。
 
+## 每次调用的格式选择
+
+每次调用本 skill，开头都询问“本次需要 PNG、PDF、SVG 中的哪些格式？默认仅 300 ppi PNG。”可任意组合；本次已明确指定格式时仍简短确认，上一轮的选择不自动沿用。等待用户回答后再最终导出；默认预选和等待时间均不代表用户已确认。等待时可以查看资料和准备绘图。记录本轮选择，仅导出已确认格式；PNG 默认 300 ppi，用户明确要求时才采用其他分辨率。
+
 ## 14. 负结果与空结果
 
 没有显著结果也是结果。若某 comparison、方向或数据库没有通过预设阈值的条目，应保留一个紧凑、明确的空结果面板或单图说明，而不是用未校正结果填充、改变阈值或直接省略。空结果图不应占用与复杂富集图相同的大画布。
@@ -10,17 +14,13 @@
 
 ## 15. 文件导出、命名与版本
 
-最终图同时导出 PDF、SVG 和 300 ppi 以上 PNG。三种格式必须来自同一个图对象、相同尺寸和相同数据，不能分别修改。含大量点或透明度时，应检查 PDF/SVG 文件大小和渲染是否异常。
+最终图按本轮确认的格式导出，默认仅生成 300 ppi PNG。选择多个格式时，来自同一个图对象、相同尺寸和相同数据。PDF/SVG 为矢量输出，检查其字体、文件大小和渲染；PNG 的 ppi 参数与导出尺寸一并记录。
 
 ```r
-export_figure <- function(p, stem, width, height, dpi = 600) {
-  ggsave(paste0(stem, ".png"), p, width = width, height = height,
-         units = "in", dpi = dpi, bg = "white")
-  ggsave(paste0(stem, ".pdf"), p, width = width, height = height,
-         units = "in", device = cairo_pdf, bg = "white")
-  ggsave(paste0(stem, ".svg"), p, width = width, height = height,
-         units = "in", bg = "white")
-}
+source("<skill-root>/scripts/figure_export.R")
+# formats comes from this invocation's confirmed user choice.
+export_publication_figure(p, stem, width, height, formats = "png", ppi = 300)
+# Explicitly selected examples: formats = c("png", "pdf") or c("pdf", "svg").
 ```
 
 文件名应包含足以识别的分析对象、comparison、方法和必要版本信息，避免 `final.png`、`new2.png`。当标签规则、坐标策略或整体设计发生实质变化时，应使用新的描述性文件名，不要只覆盖原文件名。旧文件可保留用于追溯，但最终报告只能嵌入当前版本。新的唯一文件名也能减少 Obsidian、浏览器或图片预览器缓存旧图的问题。
@@ -31,11 +31,11 @@ export_figure <- function(p, stem, width, height, dpi = 600) {
 
 Obsidian 的 `![[...]]` 通常按 vault 根目录解析。应先找到实际 `.obsidian` 所在目录并将其作为 vault root，再验证每一个嵌入路径。不能用“相对当前 note 的路径能够拼接成功”代替 Obsidian 的实际解析规则。标准 Markdown 图片 `![alt](path)` 通常按文档所在目录解析，应与 Wikilink 区分检查。
 
-推荐维护一份图形清单，至少包含：figure ID、分析对象、比较组、PNG/PDF/SVG 路径、生成脚本、生成时间、标签规则、展示变换、报告嵌入位置和当前/废弃状态。图形清单与报告嵌入应一一对应。
+推荐维护一份图形清单，至少包含：figure ID、分析对象、比较组、本轮选定格式的文件路径、生成脚本、生成时间、标签规则、展示变换、报告嵌入位置和当前/废弃状态。图形清单与报告嵌入应一一对应。
 
 ## 17. 自动检查与视觉检查
 
-自动检查至少包括：预期图形数量；PNG/PDF/SVG 是否齐全；文件是否非空且大小合理；同一 stem 的三种格式是否存在；报告中的每个嵌入路径是否按真实规则解析；是否仍引用旧文件名；标签名单有无重复；坐标范围外观测数量；封顶点数量与方向；显著性阈值和选择规则是否一致。
+自动检查至少包括：预期图形数量；本轮选定格式是否齐全；文件是否非空且大小合理；同一 stem 的本轮选定格式是否存在；报告中的每个嵌入路径是否按真实规则解析；是否仍引用旧文件名；标签名单有无重复；坐标范围外观测数量；封顶点数量与方向；显著性阈值和选择规则是否一致。
 
 自动通过不能替代视觉检查。视觉检查至少包括：标题是否居中且未被裁切；字体在 50% 缩放后是否清楚；数据区域是否占主体；图例是否正确且紧凑；长标签是否合理换行；极端点是否可见；标签引线是否过长或穿出面板；显著性标记、误差线和边界点是否被裁切；不同格式渲染是否一致。
 
@@ -54,7 +54,7 @@ Obsidian 的 `![[...]]` 通常按 vault 根目录解析。应先找到实际 `.o
 9. 图形是否白底、简洁、无 subtitle，必要主标题是否居中？
 10. 长标签、图例、画布和边距是否针对数据调整，而不是缩小字体？
 11. 缩小到约 50% 后，坐标轴、分类名称、图例和标记是否仍可读？
-12. 是否分别导出了内容一致的 PNG、PDF、SVG？
+12. 是否已询问并记录本轮格式选择，仅产出所选格式，PNG 默认 300 ppi，多格式内容是否一致？
 13. 实质修改是否使用新文件名，最终文档是否不再嵌入旧版本？
 14. Obsidian Wikilink 是否按真实 vault root 验证，Markdown 图片是否按文档目录验证？
 15. 自动检查和最困难图形的视觉检查是否均已通过？
@@ -65,6 +65,6 @@ Obsidian 的 `![[...]]` 通常按 vault 根目录解析。应先找到实际 `.o
 
 ## 本批示例的交付文件
 
-`Rscript examples/biomedical_gallery.R` 生成 12 张独立图，每张具有相同 stem 的 PNG/PDF/SVG；原始模拟数据、摘要/拟合结果、图注和绘图参数分别记录。PNG 400 dpi；PDF/SVG 从同一图对象导出。`manifest.json` 记录文件名、尺寸、随机种子及说明，`report.md` 嵌入本批新图。
+`Rscript examples/biomedical_gallery.R` 默认生成 12 张 300 ppi PNG；原始模拟数据、摘要/拟合结果、图注和绘图参数分别记录。需要其他组合时显式传入 `--formats=png,pdf,svg` 或 `--formats=pdf,svg`；PNG 分辨率可通过 `--ppi=600` 明确调整。`manifest.json` 记录本次所选格式、PNG ppi、文件名、尺寸、随机种子及说明。
 
-使用 `pwsh -File scripts/validate_figure_delivery.ps1 -ReportPath examples/biomedical-output/report.md -VaultRoot .` 检查报告路径和三格式文件。示例中的数值、估计和可视化均标为模拟，实际研究使用作者提供的输入和分析结果。
+检查器默认只要求 PNG。选择其他组合时传入对应集合，例如 `pwsh -File scripts/validate_figure_delivery.ps1 -ReportPath <report.md> -VaultRoot . -ExpectedFormats pdf,svg`。报告可嵌入 PNG/SVG，或链接 PDF；检查器支持这两类引用，仅核对指定的格式。已有旧导出文件保持原样，当前 manifest 只列本轮输出。

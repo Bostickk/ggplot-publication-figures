@@ -1,11 +1,16 @@
 # Style demonstration only: synthetic observations, no hypothesis tests.
 library(ggplot2)
 
-script_arg <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
-if (length(script_arg) != 1L) stop("Run this example with Rscript examples/prism_style_demo.R")
-script_path <- normalizePath(sub("^--file=", "", script_arg), mustWork = TRUE)
-repo_root <- dirname(dirname(script_path))
-output_dir <- file.path(repo_root, "examples", "output")
+repo_root <- getOption("biomed.repo_root", NULL)
+if (is.null(repo_root)) {
+  script_arg <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
+  if (length(script_arg) != 1L) stop("Run this example with Rscript examples/prism_style_demo.R")
+  script_path <- normalizePath(sub("^--file=", "", script_arg), mustWork = TRUE)
+  repo_root <- dirname(dirname(script_path))
+}
+source(file.path(repo_root, "scripts", "figure_export.R"))
+export_args <- parse_figure_export_args(default_output=file.path(repo_root, "examples", "output"))
+output_dir <- export_args$output
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 groups <- c("Group A", "Group B", "Group C", "Group D")
 values <- list(
@@ -67,13 +72,11 @@ p_box <- ggplot(dat, aes(group, value, fill = group)) +
 for (kind in c("bar", "box")) {
   p <- if (kind == "bar") p_bar else p_box
   stem <- file.path(output_dir, paste0("prism_npgsoft_", kind, "_scatter_demo"))
-  ggsave(paste0(stem, ".png"), p, width = 5.2, height = 4.5, dpi = 400, bg = "white")
-  ggsave(paste0(stem, ".pdf"), p, width = 5.2, height = 4.5, device = cairo_pdf, bg = "white")
-  ggsave(paste0(stem, ".svg"), p, width = 5.2, height = 4.5, device = grDevices::svg, bg = "white")
+  export_publication_figure(p, stem, 5.2, 4.5, export_args$formats, export_args$ppi)
 }
 capture.output(sessionInfo(), file = file.path(output_dir, "session-info.txt"))
 stopifnot(nrow(dat) == 40L, all(is.finite(dat$value)), min(dat$value) >= 0)
-message("Exported two plots in PNG/PDF/SVG; 10 synthetic observations per group; no exclusions or tests.")
+message("Exported two plots in selected formats: ", paste(export_args$formats,collapse=", "), "; PNG defaults to 300 ppi; synthetic data only.")
 
 writeLines(c(
   "# Prism-style figure demonstration",
@@ -82,10 +85,10 @@ writeLines(c(
   "",
   "Bar heights: mean; error bars: sample SD. All observations are shown.",
   "",
-  "![Bar plot](prism_npgsoft_bar_scatter_demo.png)",
+  figure_report_link("Bar plot", "prism_npgsoft_bar_scatter_demo", export_args$formats),
   "",
   "Boxes: median and interquartile range; whiskers: observations within 1.5 x IQR.",
   "All observations are shown by the point layer, including outliers.",
   "",
-  "![Boxplot](prism_npgsoft_box_scatter_demo.png)"
+  figure_report_link("Boxplot", "prism_npgsoft_box_scatter_demo", export_args$formats)
 ), file.path(output_dir, "report.md"))
