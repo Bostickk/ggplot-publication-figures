@@ -1,0 +1,161 @@
+{
+  "data_origin": "Synthetic demonstrations only",
+  "figures": [
+    {
+      "id": "01_bar",
+      "title": "Bar + observations",
+      "caption": "Synthetic data; n = 10 independent units per group. Bars: mean; error bars: sample SD; all 40 observations shown. Horizontal jitter only, seed 42.",
+      "seed": 42,
+      "width_in": 5.7,
+      "height_in": 4.6,
+      "files": [
+        "01_bar.png",
+        "01_bar.pdf",
+        "01_bar.svg"
+      ]
+    },
+    {
+      "id": "02_box",
+      "title": "Box + observations",
+      "caption": "Same synthetic data as 01. Boxes: median and hinges; whiskers: most extreme observations within 1.5 x IQR. All observations shown once by the point layer.",
+      "seed": 42,
+      "width_in": 5.7,
+      "height_in": 4.6,
+      "files": [
+        "02_box.png",
+        "02_box.pdf",
+        "02_box.svg"
+      ]
+    },
+    {
+      "id": "03_paired",
+      "title": "Paired change",
+      "caption": "Synthetic paired measurements for 12 individuals. Each grey line joins the same individual; fixed identical horizontal offsets preserve pairing. No hypothesis test.",
+      "seed": 103,
+      "width_in": 4.8,
+      "height_in": 4.6,
+      "files": [
+        "03_paired.png",
+        "03_paired.pdf",
+        "03_paired.svg"
+      ]
+    },
+    {
+      "id": "04_longitudinal",
+      "title": "Longitudinal trajectories",
+      "caption": "Synthetic data: 10 individuals/group, visits at 0, 2, 5 and 8 days. Thin lines: individuals; thick lines: group means; bands: descriptive mean +/- SD. L13 at day 5 is missing and its trajectory retains a gap. N by visit is in longitudinal_summary.csv.",
+      "seed": 104,
+      "width_in": 6.4,
+      "height_in": 4.6,
+      "files": [
+        "04_longitudinal.png",
+        "04_longitudinal.pdf",
+        "04_longitudinal.svg"
+      ]
+    },
+    {
+      "id": "05_nested",
+      "title": "Nested observations",
+      "caption": "Synthetic data: 4 independent animals/group, 6 fields/animal. Small circles: fields; large circles: animal means; dashed line: mean of the four animal means in that group. Panels separate groups. No hypothesis test.",
+      "seed": 105,
+      "width_in": 7,
+      "height_in": 4.5,
+      "files": [
+        "05_nested.png",
+        "05_nested.pdf",
+        "05_nested.svg"
+      ]
+    },
+    {
+      "id": "06_dose",
+      "title": "Dose-response curve",
+      "caption": "Synthetic independent measurements: 6 per positive concentration. Curve: four-parameter logistic nls fit; band: approximate 95% CI for the mean using the delta method and residual t quantile. No prediction interval or extrapolation. Fitted parameters/curve saved separately.",
+      "seed": 106,
+      "width_in": 6,
+      "height_in": 4.6,
+      "files": [
+        "06_dose.png",
+        "06_dose.pdf",
+        "06_dose.svg"
+      ]
+    },
+    {
+      "id": "07_forest",
+      "title": "Forest plot",
+      "caption": "Directly supplied synthetic adjusted risk ratios and 95% confidence limits; no regression fitted. Ratio axis is logarithmic, null reference = 1. Row labels and numeric intervals correspond to the saved result table.",
+      "seed": null,
+      "width_in": 7,
+      "height_in": 4.5,
+      "files": [
+        "07_forest.png",
+        "07_forest.pdf",
+        "07_forest.svg"
+      ]
+    },
+    {
+      "id": "08_km",
+      "title": "Kaplan-Meier curve",
+      "caption": "Synthetic right-censored single-event data, 60 individuals/group, common time zero; maximum follow-up 12 months. Curves: Kaplan-Meier; bands: log-log 95% CI; + marks: censoring. Risk table: time >= each displayed time. No group-comparison test.",
+      "seed": 108,
+      "width_in": 6.4,
+      "height_in": 5.5,
+      "files": [
+        "08_km.png",
+        "08_km.pdf",
+        "08_km.svg"
+      ]
+    },
+    {
+      "id": "09_cif",
+      "title": "Competing-risk cumulative incidence",
+      "caption": "Synthetic data: 80 individuals/group; target outcome and competing death are absorbing first events, with right censoring and a common time zero. Curves: Aalen-Johansen target-event probability; bands: pointwise plain 95% CI (bounded to [0,1] by survival). Risk table counts those free of both events and uncensored immediately before each displayed time. No test or regression.",
+      "seed": 109,
+      "width_in": 6.4,
+      "height_in": 5.5,
+      "files": [
+        "09_cif.png",
+        "09_cif.pdf",
+        "09_cif.svg"
+      ]
+    },
+    {
+      "id": "10_volcano",
+      "title": "Volcano plot",
+      "caption": "Synthetic 600-gene result table; constructed two-sided P values are BH-adjusted within the example. DEG display: adjusted P < 0.05 and |log2FC| > 1. Labels: union of top 4 per direction by adjusted P and absolute log2FC, ties by stable keys. No display capping or label cherry-picking.",
+      "seed": 110,
+      "width_in": 6.8,
+      "height_in": 5.5,
+      "files": [
+        "10_volcano.png",
+        "10_volcano.pdf",
+        "10_volcano.svg"
+      ]
+    },
+    {
+      "id": "11_heatmap",
+      "title": "Annotated row-Z heatmap",
+      "caption": "Synthetic transformed measurement matrix: 20 genes x 12 samples, 4/group. Values standardized within each row (sample SD); gene rows clustered by Euclidean distance and complete linkage. Samples retain group order. Symmetric colour limits cover all values; Z-scores encode within-gene variation, not between-gene abundance.",
+      "seed": 111,
+      "width_in": 6.3,
+      "height_in": 5.9,
+      "files": [
+        "11_heatmap.png",
+        "11_heatmap.pdf",
+        "11_heatmap.svg"
+      ]
+    },
+    {
+      "id": "12_enrichment",
+      "title": "ORA dot plot",
+      "caption": "Illustrative synthetic GO biological-process-style ORA result table; no enrichment test is run and no GO identifiers are assigned. All 9 illustrative terms are shown in adjusted-P order. Ratio = count / 120 submitted genes. BP only; CC/MF and GSEA were not simulated. Values describe no biological discovery.",
+      "seed": null,
+      "width_in": 8,
+      "height_in": 5.3,
+      "files": [
+        "12_enrichment.png",
+        "12_enrichment.pdf",
+        "12_enrichment.svg"
+      ]
+    }
+  ]
+}

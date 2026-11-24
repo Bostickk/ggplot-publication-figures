@@ -1,0 +1,27 @@
+# Portable synthetic gallery. Run: Rscript examples/biomedical_gallery.R
+repo <- getOption("biomed.repo_root", NULL)
+if (is.null(repo)) {
+  arg <- grep("^--file=",commandArgs(trailingOnly=FALSE),value=TRUE)
+  if(length(arg)!=1L)stop("Run with Rscript examples/biomedical_gallery.R")
+  repo <- dirname(dirname(normalizePath(sub("^--file=","",arg),mustWork=TRUE)))
+}
+required <- c("ggplot2","ggrepel","patchwork","survival","jsonlite")
+for (pkg in required) if(!requireNamespace(pkg,quietly=TRUE)) stop("Install required R package: ",pkg)
+library(ggplot2)
+source(file.path(repo,"scripts/publication_palettes.R"))
+source(file.path(repo,"scripts/biomedical_styles.R"))
+for (file in c("common.R","experimental.R","clinical.R","omics.R")) source(file.path(repo,"examples/lib",file))
+ctx <- new_gallery_context(repo,file.path(repo,"examples/biomedical-output"))
+run_experimental_examples(ctx)
+run_clinical_examples(ctx)
+run_omics_examples(ctx)
+stopifnot(length(ctx$items)==12L)
+expected <- unlist(lapply(ctx$items,`[[`,"files"),use.names=FALSE)
+stopifnot(all(file.exists(file.path(ctx$out,expected))),all(file.info(file.path(ctx$out,expected))$size>1024))
+jsonlite::write_json(list(data_origin="Synthetic demonstrations only",figures=unname(ctx$items)),
+                     file.path(ctx$out,"manifest.json"),pretty=TRUE,auto_unbox=TRUE,na="null")
+report<-c("# Biomedical figure gallery","","All observations and results are simulated for demonstration.","")
+for(item in ctx$items)report<-c(report,paste0("## ",item$title),"",item$caption,"",paste0("![",item$title,"](",item$id,".png)"),"")
+writeLines(report,file.path(ctx$out,"report.md"))
+capture.output(sessionInfo(),file=file.path(ctx$out,"session-info.txt"))
+message("PASS: 12 figures, 36 plot files, result tables, captions and manifest exported.")

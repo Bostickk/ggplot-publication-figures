@@ -2,7 +2,7 @@
 
 **用自然语言，把数据画成风格统一、可复现的科研图。**
 
-Prism 风格 · 原始观测可见 · 8 套可复用配色 · PNG / PDF / SVG
+Prism 风格 · 原始观测可见 · 8 套可复用配色 · 12 张可运行示例 · PNG / PDF / SVG
 
 一个面向 **Codex** 的科研绘图 skill：将图形设计、R 代码、视觉检查和文件交付串成可复用的工作流，适合基础实验、临床研究和生物信息学图形。
 
@@ -24,6 +24,20 @@ Prism 风格 · 原始观测可见 · 8 套可复用配色 · PNG / PDF / SVG
 </table>
 
 以上示例均使用**模拟数据**，每组 10 个观测。柱状图展示均值 ± 标准差；箱线图展示中位数、四分位区间及 1.5 × IQR 范围内的须，全部观测由散点层显示。配色为 `npg_soft`，可用[示例脚本](examples/prism_style_demo.R)复现。
+
+## 从基础实验到临床与生信图形
+
+![12 张生物医学示例图](assets/biomedical-gallery.png)
+
+| 基础实验 | 临床研究 | 生信结果 |
+| --- | --- | --- |
+| 柱状图、箱线图与原始散点 | RR 森林图与 95% CI | 火山图与确定标签规则 |
+| 配对变化与多时间点轨迹 | KM 曲线、删失标记与风险表 | 带样本分组的行 Z-score 热图 |
+| 分层散点与剂量–反应曲线 | 竞争风险累积发生率与风险表 | ORA 富集点图 |
+
+打开[完整示例图库](examples/biomedical_gallery.md)查看每张预览、模拟数据说明和代码位置。实验图保留 Prism 风格；临床和生信图形各自采用合适的效应量轴、风险表或连续色标。
+
+规范采用按需读取的模块：[共同原则](references/core.md)、[基础实验](references/experimental.md)、[临床](references/clinical.md)、[生信](references/omics.md)、[影像指导](references/imaging.md)、[组合排版](references/composition.md)与[交付](references/delivery.md)。影像模块目前提供处理与定量显示指导，尚未包含可运行显微图或 WB 示例。
 
 ## 为什么使用这个 skill
 
@@ -75,7 +89,7 @@ git clone https://github.com/Bostickk/ggplot-publication-figures.git \
 需要本地 R 环境。基础绘图使用 `ggplot2`，Prism 主题优先使用 `ggprism`：
 
 ```r
-install.packages(c("ggplot2", "ggprism"))
+install.packages(c("ggplot2", "ggprism", "ggrepel", "patchwork", "survival", "jsonlite"))
 ```
 
 具体任务可能另需 `dplyr`、`ggrepel` 等包。分组图主题提供纯 ggplot2 后备方案。skill 由 agent 读取规则、生成和执行项目代码；配色函数和示例脚本也可以直接在 R 中使用。
@@ -145,13 +159,13 @@ group_colours <- setNames(
 
 ## 复现与交付
 
-克隆仓库后，在仓库根目录运行示例：
+克隆仓库后，在仓库根目录运行完整的 12 图示例：
 
 ```bash
-Rscript examples/prism_style_demo.R
+Rscript examples/biomedical_gallery.R
 ```
 
-脚本在 `examples/output/` 中生成两张图的 PNG / PDF / SVG、模拟数据 CSV、R 环境信息和一个含图片的 Markdown 报告。示例固定横向抖动的随机种子，保留纵轴测量值，不进行假设检验。
+脚本在 `examples/biomedical-output/` 中生成 12 张图的 PNG / PDF / SVG、模拟数据及分析结果 CSV、R 环境信息、图注和 manifest.json。随机数据与布局固定种子；示例分析的计算方法在代码和图注中说明。已有的双图入门示例仍可用 `Rscript examples/prism_style_demo.R` 运行。
 
 示例已在 Windows、R 4.5.3、ggplot2 4.0.2 和 ggprism 1.0.7 环境运行。脚本使用仓库相对路径，其他平台的字体和导出设备应按本机环境检查。
 
@@ -159,7 +173,7 @@ Rscript examples/prism_style_demo.R
 
 ```powershell
 pwsh -File scripts/validate_figure_delivery.ps1 `
-  -ReportPath examples/output/report.md `
+  -ReportPath examples/biomedical-output/report.md `
   -VaultRoot .
 ```
 
@@ -169,17 +183,20 @@ pwsh -File scripts/validate_figure_delivery.ps1 `
 
 ```text
 ggplot-publication-figures/
-├── SKILL.md                         # agent 入口与默认工作流
-├── references/
-│   ├── ggplot2 科研绘图规范.md       # 完整中文规范
-│   ├── palette-guide.md             # 配色选择、来源与调整记录
-│   └── palette-bank.json            # 固定 HEX 色值与元数据
+├── SKILL.md                         # 简短入口与按需读取的模块
+├── references/                      # 基础实验、临床、生信、影像与交付规范
+│   ├── palette-guide.md
+│   └── palette-bank.json
 ├── scripts/
-│   ├── publication_palettes.R       # 可独立使用的 R 配色函数
-│   └── validate_figure_delivery.ps1  # 报告图片与文件检查
+│   ├── biomedical_styles.R          # Prism / clinical / omics 样式
+│   ├── publication_palettes.R       # 8 套固定配色
+│   └── validate_figure_delivery.ps1
 ├── examples/
-│   └── prism_style_demo.R           # 可复现的模拟数据示例
-└── assets/                          # README 图形与色卡
+│   ├── biomedical_gallery.R         # 完整 12 图运行入口
+│   ├── biomedical_gallery.md        # 单图预览、说明与代码位置
+│   ├── lib/                         # 共同导出、实验、临床、生信实现
+│   └── prism_style_demo.R           # 双图入门示例
+└── assets/                          # 首页色卡、概览与单图预览
 ```
 
 ## 来源与参与
