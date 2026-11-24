@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "verified_date": "2026-11-24",
+  "default_palette": "npg_soft",
+  "provenance": "Original ggsci hex verified from installed ggsci 4.2.0 against online palette documentation. Set2 verified with RColorBrewer and ColorBrewer source. Tol hex copied from author figures 1 and 8.",
+  "palettes": {
+    "npg_soft": {
+      "label": "NPG soft (adapted)",
+      "colours": [
+        "#71C9DD",
+        "#EB6F5D",
+        "#33B39F",
+        "#6376A0",
+        "#F5AF99",
+        "#9DA7C3",
+        "#A7DACE",
+        "#E33333",
+        "#98816D",
+        "#C0B09D"
+      ],
+      "source_url": "https://nanx.me/ggsci/reference/pal_npg.html",
+      "extraction": "Derived from stored NPG original",
+      "adaptation": "Rounding half up in sRGB: new = 0.80 * original + 0.20 * white. Original one-based order: 2,1,3,4,5,6,7,8,9,10. Opaque HEX; alpha stays 1.",
+      "use_note": "推荐的清亮柔和默认值，适合 Prism 风格柱体和箱体。"
+    },
+    "npg": {
+      "label": "NPG original",
+      "colours": [
+        "#E64B35",
+        "#4DBBD5",
+        "#00A087",
+        "#3C5488",
+        "#F39B7F",
+        "#8491B4",
+        "#91D1C2",
+        "#DC0000",
+        "#7E6148",
+        "#B09C85"
+      ],
+      "source_url": "https://nanx.me/ggsci/reference/pal_npg.html",
+      "extraction": "ggsci::pal_npg(\"nrc\")(10)",
+      "adaptation": "none",
+      "use_note": "颜色区分清楚，适合分组测量图。"
+    },
+    "nejm": {
+      "label": "NEJM",
+      "colours": [
+        "#BC3C29",
+        "#0072B5",
+        "#E18727",
+        "#20854E",
+        "#7876B1",
+        "#6F99AD",
+        "#FFDC91",
+        "#EE4C97"
+      ],
+      "source_url": "https://nanx.me/ggsci/reference/pal_nejm.html",
+      "extraction": "ggsci::pal_nejm(\"default\")(8)",
+      "adaptation": "none",
+      "use_note": "蓝、红、橙、绿均衡，适合临床与基础研究分组。"
+    },
+    "lancet": {
+      "label": "Lancet",
+      "colours": [
+        "#00468B",
+        "#ED0000",
+        "#42B540",
+        "#0099B4",
+        "#925E9F",
+        "#FDAF91",
+        "#AD002A",
+        "#ADB6B6",
+        "#1B1919"
+      ],
+      "source_url": "https://nanx.me/ggsci/reference/pal_lancet.html",
+      "extraction": "ggsci::pal_lancet(\"lanonc\")(9)",
+      "adaptation": "none",
+      "use_note": "对比强，红色较醒目；适合需要较强组间区分时。"
+    },
+    "aaas": {
+      "label": "AAAS",
+      "colours": [
+        "#3B4992",
+        "#EE0000",
+        "#008B45",
+        "#631879",
+        "#008280",
+        "#BB0021",
+        "#5F559B",
+        "#A20056",
+        "#808180",
+        "#1B1919"
+      ],
+      "source_url": "https://nanx.me/ggsci/reference/pal_aaas.html",
+      "extraction": "ggsci::pal_aaas(\"default\")(10)",
+      "adaptation": "none",
+      "use_note": "整体较深，红色突出，作为高对比备选。"
+    },
+    "set2": {
+      "label": "ColorBrewer Set2",
+      "colours": [
+        "#66C2A5",
+        "#FC8D62",
+        "#8DA0CB",
+        "#E78AC3",
+        "#A6D854",
+        "#FFD92F",
+        "#E5C494",
+        "#B3B3B3"
+      ],
+      "source_url": "https://colorbrewer2.org/#type=qualitative&scheme=Set2&n=8",
+      "extraction": "RColorBrewer::brewer.pal(8, \"Set2\")",
+      "adaptation": "none",
+      "use_note": "柔和且有色感，适合柱体与箱体填充。"
+    },
+    "tol_bright": {
+      "label": "Paul Tol Bright",
+      "colours": [
+        "#4477AA",
+        "#EE6677",
+        "#228833",
+        "#CCBB44",
+        "#66CCEE",
+        "#AA3377",
+        "#BBBBBB"
+      ],
+      "source_url": "https://sronpersonalpages.nl/~pault/",
+      "extraction": "Paul Tol Figure 1; original order",
+      "adaptation": "none",
+      "use_note": "需要优先考虑色觉差异时的备选，仍须核对实际用色组合。"
+    },
+    "tol_light": {
+      "label": "Paul Tol Light",
+      "colours": [
+        "#77AADD",
+        "#EE8866",
+        "#EEDD88",
+        "#FFAABB",
+        "#99DDFF",
+        "#44BB99",
+        "#BBCC33",
+        "#AAAA00",
+        "#DDDDDD"
+      ],
+      "source_url": "https://sronpersonalpages.nl/~pault/",
+      "extraction": "Paul Tol Figure 8; original order",
+      "adaptation": "none",
+      "use_note": "清浅、明亮，适合有黑色轮廓的填充区域；细线优先用更深的颜色。"
+    }
+  }
+}

@@ -29,6 +29,16 @@ Read [references/ggplot2 科研绘图规范.md](references/ggplot2%20科研绘�
 - Never treat “files generated” as “delivered” until report embeds resolve to the exact current files.
 - When an extreme value is capped for display, keep the original value for analysis, mark the boundary point distinctly, label the boundary tick, and explain the display-only transformation outside the plot.
 
+## Grouped continuous-data plot defaults
+
+For grouped continuous measurements with individual observations, default to a bar plot with overlaid points or a boxplot with overlaid points. Choose the summary to match the scientific question: bars for an explicitly intended mean and defined error measure, boxes for the median and distribution. Apply these defaults unless the user explicitly requests a different style:
+
+- Use a GraphPad Prism-inspired appearance for these plots: white background, black left/bottom axes and outward ticks, no grid or enclosing panel border, readable sans-serif text, capped error bars, and compact significance brackets. Prefer `ggprism::theme_prism()` when available, with the clear, moderately saturated fills and point styling below; otherwise use the ggplot2 fallback in reference section 4. Do not use the generic theme unchanged for these grouped plots.
+- Every overlaid observation is a circular, black-outlined, white-filled point: `shape = 21`, `colour = "black"`, `fill = "white"`, `alpha = 1`. Set these outside `aes()` so group scales do not override them.
+- Bars and boxes have black outlines and clear, moderately saturated fills; avoid fluorescent colours and overly grey fills. Default to `npg_soft` from the reusable [palette guide](references/palette-guide.md). Read that guide when selecting or changing grouped-plot colours; exact HEX values and provenance are in [palette-bank.json](references/palette-bank.json), with reusable R vectors in `scripts/publication_palettes.R`. Preserve project group-to-colour mappings and explicit user choices.
+- Jitter horizontally only with a fixed seed; retain exact measured y-values. Show all available independent biological observations. When overlaying all points on a boxplot, use `outlier.shape = NA` to avoid drawing outliers twice.
+- If only aggregate summaries or counts are supplied, style the bars consistently and state that individual observations are unavailable; do not invent points. These defaults apply to grouped measurement plots, not to unrelated plot types such as volcano plots or PCA.
+
 ## Delivery validation
 
 For Obsidian or Markdown reports, run:
